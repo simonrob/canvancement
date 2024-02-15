@@ -39,6 +39,22 @@
       document.head.append(script);
     }
     function sortAllCourses() {
+      let lastRow;
+      jq('table#my_courses_table').find('tr').each(function() {
+        const currentElement = jq(this);
+        currentElement.find('th').eq(-1).after('<th class="course-list-no-left-border course-list-published-column" scope="col">Status</th>');
+        currentElement.find('td').eq(-1).after('<td class="course-list-no-left-border course-list-published-column">Current</td>');
+        lastRow = currentElement;
+      });
+      jq('table#past_enrollments_table tbody').find('tr').each(function() {
+        const currentElement = jq(this);
+        currentElement.css({opacity: 0.5}).find('td').eq(-1).after('<td class="course-list-no-left-border course-list-published-column">Previous</td>');
+        lastRow.after(currentElement);
+        lastRow = currentElement;
+      });
+      jq('table#past_enrollments_table').remove();
+      jq('div h2:contains("Past enrolments")').remove();
+
       const el = document.createElement('style');
       document.head.appendChild(el);
       const styleSheet = el.sheet;
@@ -52,7 +68,7 @@
       });
       jq('table.ic-Table').tablesorter({
         'widgets' : [ 'filter' ],
-        // 'sortList' : [[3,1]],
+        'sortList' : [[3, 1]],
         'cssIconAsc' : 'icon-mini-arrow-up',
         'cssIconDesc' : 'icon-mini-arrow-down',
         'cssIconNone' : 'icon-mini-arrow-double',
