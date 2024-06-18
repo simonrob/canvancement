@@ -4,7 +4,7 @@
 // @description Allows sorting on any column of the All Courses list
 // @include     https://*.instructure.com/courses
 // @require     https://cdn.jsdelivr.net/combine/npm/jquery@3.4.1/dist/jquery.min.js,npm/tablesorter@2.31.1
-// @version     5
+// @version     6
 // @grant       none
 // ==/UserScript==
 (function() {
@@ -39,6 +39,10 @@
       document.head.append(script);
     }
     function sortAllCourses() {
+      // disable built-in sorting as ours is immediate and doesn't require a page load
+      jq('i.course-list-sort-icon').hide();
+      jq('a[id^="cc_"]').removeAttr('href');
+
       let lastRow;
       jq('table#my_courses_table').find('tr').each(function() {
         const currentElement = jq(this);
